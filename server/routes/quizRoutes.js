@@ -11,19 +11,19 @@ const {
     quizQuestions,
     deleteQuestion,
     answerQuestion} = require('./../controllers/quizControllers');
+const requireAuth = require('./../middleware/requireAuth');
 
-
-router.get('/',getAllQuizzes);
-router.get('/impressions',totalImpressions);
-router.get('/:quiz_id',getQuizDetails);
-router.patch('/:quiz_id/impressions',increaseQuizImpressions);
-router.post('/create',createQuiz);
-router.patch('/:quiz_id',editQuiz);
-router.delete('/:quiz_id',deleteQuiz);
-router.get('/questions',totalQuestions);
-router.get('/:quiz_id/questions', quizQuestions);
-router.delete('/:quiz_id/question', deleteQuestion);
-router.patch('/:quiz_id/questions/:question_id/answer',answerQuestion);
+router.get('/',requireAuth,getAllQuizzes);
+router.get('/impressions',requireAuth,totalImpressions);
+router.get('/:quiz_id',requireAuth,getQuizDetails);
+router.patch('/:quiz_id/impressions',requireAuth,increaseQuizImpressions);
+router.post('/create',requireAuth,createQuiz);
+router.patch('/:quiz_id',requireAuth,editQuiz);
+router.delete('/:quiz_id',requireAuth,deleteQuiz);
+router.get('/questions',requireAuth,totalQuestions);
+router.get('/:quiz_id/questions',requireAuth, quizQuestions);
+router.delete('/:quiz_id/question',requireAuth, deleteQuestion);
+router.patch('/:quiz_id/questions/:question_id/answer',requireAuth,answerQuestion);
 
 
 

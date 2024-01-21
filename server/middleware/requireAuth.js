@@ -16,7 +16,7 @@ const requireAuth = async (req,res,next) => {
             next(error);
         } else {
             const idObj = jwt.verify(token,process.env.SECRET);
-            const {id: _id} = idObj;
+            const {userId: _id} = idObj;
             const user = await User.findById(_id);
             if(user) {
                 req.headers["user"] = user;

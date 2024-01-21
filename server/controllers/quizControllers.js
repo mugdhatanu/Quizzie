@@ -4,8 +4,9 @@ const {poll,qna} = require('./../utils/analytics');
 
 
 const getAllQuizzes = async(req,res,next) => {
+    const {_id: user_id} = req["headers"].user;
     try {
-        const quizzes = await Quiz.find({});
+        const quizzes = await Quiz.find({userId: user_id});
         res.status(200).json(quizzes);
     } catch(err) {
         next(err);
@@ -57,8 +58,9 @@ const increaseQuizImpressions = async(req,res,next) => {
 
 const createQuiz = async(req,res,next) => {
     const {name,quiz_type,options_type,timer,questions} = req.body;
+    const {_id,user_id} = req["headers"].user;
     try {
-        await Quiz.create({name,quizType: quiz_type,optionsType: options_type,timer,questions});
+        await Quiz.create({userId: user_id,name,quizType: quiz_type,optionsType: options_type,timer,questions});
         res.status(201).json({msg: "Successfully created quiz"});
     } catch(err) {
         next(err);

@@ -21,9 +21,10 @@ const QuizSchema = new Schema({
     name: {type: String, required: true},
     impressions: {type: Number, default: 0},
     quizType: {type: String, enum: ['Question','Poll'],required: true},
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     optionsType: {type: String,enum: ['Text', 'Image','Text-Image'],required: true},
     timer: {type: String, enum: ["5", "10", "OFF"],required: true},
     questions: {type: [QuestionSchema], requried: true}
 },{timestamps: true});
 
-module.exports = mongoose.model('quiz',QuizSchema);
+module.exports = mongoose.model('Quiz',QuizSchema);
