@@ -57,11 +57,13 @@ const increaseQuizImpressions = async(req,res,next) => {
 }
 
 const createQuiz = async(req,res,next) => {
-    const {name,quiz_type,options_type,timer,questions} = req.body;
-    const {_id,user_id} = req["headers"].user;
+    const {name,quizType,optionsType,timer,questions} = req.body;
+    const {_id:user_id} = req["headers"].user;
     try {
-        await Quiz.create({userId: user_id,name,quizType: quiz_type,optionsType: options_type,timer,questions});
-        res.status(201).json({msg: "Successfully created quiz"});
+        const quiz = await Quiz.create({userId: user_id,name,quizType,optionsType,timer,questions});
+        quiz.route = `quizzes/play/${quiz._id}`;
+        quiz.save();
+        res.status(201).json({msg: "Successfully created quiz",quizRoute: quiz.route});
     } catch(err) {
         next(err);
     }
@@ -79,15 +81,15 @@ const deleteQuiz = async(req,res,next) => {
 }
 
 const editQuiz = async(req,res,next) => {
-    const {name,quiz_type,options_type,timer,questions} = req.body;
-    const {quiz_id: _id} = req.params;
+    const {name,quizType,optionsType,timer,questions,_id} = req.body;
     try {
-        await Quiz.findByIdAndUpdate(_id,{name,quizType: quiz_type,optionsType: options_type,timer,questions});
+        await Quiz.findByIdAndUpdate(_id,{name,quizType,optionsType,timer,questions});
         res.status(200).json({msg: "Successfully updated quiz"});
     } catch(err) {
         next(err);
     }
 }
+
 
 const totalQuestions = async (req,res,next) => {
     try {
@@ -114,71 +116,6 @@ const quizQuestions = async(req,res,next) => {
             error.status = 404;
             next(error);
         }
-    } catch(err) {
-        next(err);
-    }
-}
-
-const createQuestion = async(req,res,next) => {
-    const {_id,options,answer,totalAttempts,correctAttempts,incorrectAttempts} = req.body;
-    try {
-        const quiz = await Quiz.findOne({_id});
-        const {questions} = quiz;
-        if(questions.length < 5) {
-            const serialNum = question.length+1;
-            const question = { options,answer,totalAttempts,correctAttempts,incorrectAttempts,serialNum};
-            const updatedQuestions = questions.length ? [...questions,question]: [question];
-            quiz.questions = updatedQuestions;
-            quiz.save();
-            res.status(200).json({msg: "Added question  Successfully"});
-        } else {
-            const error = new Error("Question limit reached");
-            error.status = 400;
-            next(error);
-        }
-        
-    } catch(err) {
-        next(err);
-    }
-}
-
-const editQuestion = async(req,res,next) => {
-    const {_id,serial_num,options,answer} = req.body;
-    try {
-        const quiz = await Quiz.findOne({_id});
-        const {questions} = quiz;
-        const question = questions.find(question => question.serialNum === serial_num);
-        question.options = options;
-        question.answer = answer;
-        quiz.save();
-        res.status(200).json({msg: "Question updating Successfully"});
-    } catch(err) {
-        next(err);
-    }
-}
-
-const deleteQuestion = async(req,res,next) => {
-    const {question_id} = req.body;
-    const {quiz_id} = req.params;
-    try {
-        const quiz = await Quiz.findOne({_id: quiz_id});
-        if(quiz) {
-            const {questions} = quiz;
-            if(questions.length > 1) {
-                const updatedQuestions = questions.filter(question => question._id !== question_id);
-                quiz.questions = updatedQuestions;
-                quiz.save();
-                res.status(200).json({msg: "Question deleted Successfully"});
-            } else {
-                const error = new Error("Mimimum one question is required");
-                error.status = 400;
-                next(error);
-            }
-        } else {
-            const error = new Error("Quiz not found");
-            error.status = 404;
-            next(error);
-        }        
     } catch(err) {
         next(err);
     }
@@ -215,8 +152,5 @@ module.exports = {
     editQuiz,
     totalQuestions,
     quizQuestions,
-    createQuestion,
-    editQuestion,
-    deleteQuestion,
     answerQuestion,
 }
