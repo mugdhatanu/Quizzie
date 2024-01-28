@@ -1,0 +1,59 @@
+
+
+.quiz-cards {
+    color: var(--slate-800);
+}
+
+.quiz-cards h3 {
+    font-size: clamp(2rem,2vw,3rem);
+}
+
+.cards-section {
+    display: flex;
+    gap: 1rem;
+    overflow-y: scroll;
+}
+
+.cards-section::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+.cards-section::-webkit-scrollbar-thumb {
+    background-color: var(--slate-800);
+    border-radius: 10px;
+}
+
+.quiz-card {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.quiz-card p {
+    margin: 0;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name {
+    font-size: clamp(1.2rem,2vw,1.8rem);
+}
+
+.impression {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--orange-600);
+}
+
+.time {
+    color: var(--green-500);
+    font-size: 90%;
+}
+
+.none {
+    color: var(--orange-600);
+}

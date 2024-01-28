@@ -1,0 +1,37 @@
+.info {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.cards {
+    background-color: white;
+    font-size: clamp(1rem,3vw,2rem);
+    padding: 1.5rem 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.cards p {
+    margin: 0;
+}
+
+
+.value {
+    font-size: clamp(2rem,3.5vw,4rem);
+}
+
+.quiz {
+    color: var(--orange-600);
+}
+
+.question {
+    color: var(--green-600)
+}
+
+.impression {
+    color: var(--blue-600)
+}

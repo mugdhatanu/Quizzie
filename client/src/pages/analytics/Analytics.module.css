@@ -1,0 +1,136 @@
+.analytics {
+    background-color: var(--grey-300);
+    width: 100%;
+    flex-grow: 1;
+    padding: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.analytics h2 {
+    color: var(--blue-500);
+    font-size: clamp(2.5rem,3vw,3.5rem);
+    font-weight: 600;
+}
+
+.analytics table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.8rem,1vw,1.2rem);
+}
+
+.header {
+    background-color: var(--blue-500);
+    color: white;
+}
+
+.header th {
+    padding: 0.5rem;
+    font-weight: 600;
+}
+
+.header th:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.header th:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+.quiz td {
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.quiz td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.quiz td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.buttons button{
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+}
+
+.buttons button img {
+    width: 120%;
+    min-width: 20px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    opacity: 80%;
+}
+
+.delete {
+    position: absolute;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.delete h3 {
+    font-weight: 600;
+    width: 60%;
+    font-size: clamp(1.5rem,1.5vw,2.5rem);
+}
+
+.delete-btns {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    
+}
+
+.delete-btns button {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    width: 40%;
+    font-size: clamp(0.8rem,0.8vw,1.2rem);
+    cursor: pointer;
+}
+
+.delete-btns button:first-child {
+    background-color: var(--red-500);
+    color: white;
+}
+
+.delete-btns button:last-child {
+    background-color: transparent;   
+}
+
+.quiz a {
+    color: black;
+}

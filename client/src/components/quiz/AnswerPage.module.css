@@ -1,0 +1,135 @@
+.quiz-section, .result {
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    height: 100%;
+    color: var(--slate-800);
+    border-radius: 15px;
+}
+
+.result {
+    justify-content: center;
+}
+
+.quiz-section header {
+    display: flex;
+    width: 100%;
+    font-size: clamp(2rem,1.5vw,3rem);
+}
+
+.question-num {
+    margin-right: auto;
+    margin-left: 1rem;
+    margin-top: 2rem;
+}
+
+.timer {
+    margin-right: 1rem;
+    margin-top: 2rem;
+    color: var(--red-600);
+}
+
+.quiz-section main {
+    display: flex;
+    flex-direction: column;
+}
+
+.question-text, .completion-text {
+    font-size: clamp(2rem,1.5vw,3rem);
+    margin-left: 2rem;
+    margin-right: 2rem;
+    text-align: center;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.options button {
+    padding: 1rem 0;
+    border-radius: 10px;
+    font-family: 'Poppins',sans-serif;
+    font-weight: 600;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-size: calc(1.2rem,1vw,1.5rem);
+}
+
+.options button:hover {
+    border: 2px solid var(--blue-600);
+}
+
+.next {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3rem;
+    width: 30%;
+    font-family: 'Poppins',sans-serif;
+    font-weight: 600;
+    border: none;
+    background-color: var(--green-600);
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem;
+    font-size: clamp(1rem, 1vw,1.5rem);
+    cursor: pointer;
+}
+
+.completion-text {
+    margin-bottom: 0;
+}
+
+.score {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score p {
+    margin: 0;
+    font-size: clamp(2rem,1.5vw,3rem);
+}
+
+.score p:last-child {
+    color: var(--green-600);
+}
+
+.poll-text {
+    text-align: center;
+    font-size: clamp(2.5rem,2vw,3.5rem);
+}
+
+@media screen and (min-width: 800px) {
+    
+    .question-num  {
+        margin-left: 3rem;
+    }
+
+    .timer {
+        margin-right: 3rem;
+    }
+
+    .options {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 3rem;
+    }
+
+    .options button {
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: clamp(1.5rem,1.5vw,2.5rem);
+    }
+
+    .score {
+        flex-direction: row;
+    }
+}

@@ -1,0 +1,48 @@
+.auth {
+    width: 100%;
+    background-color: var(--grey-500);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-container {
+    background-color: white;
+    height: 70dvh;
+    width: 70%;
+    border-radius: 15px;
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.15);
+    color: var(--slate-800);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-container h1 {
+    font-family: 'Jomhuria', serif;
+    font-weight: 400;
+    font-size: clamp(4rem,5vw,5rem);
+    margin-bottom: 1rem;
+}
+
+.toggle-btns {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.toggle-btns button {
+    background-color: transparent;
+    font-size: clamp(1.2rem,1vw,1.5rem);
+    padding: 0.3rem 4rem;
+    border-radius: 10px;
+    color: var(--slate-800);
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+.toggle-btns button:hover, .select {
+    box-shadow: 0 0 50px 0 rgba(0, 25, 255, 0.24);
+}

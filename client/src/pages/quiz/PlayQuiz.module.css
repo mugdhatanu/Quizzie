@@ -1,0 +1,32 @@
+.play {
+    width: 100%;
+}
+
+@media screen and (min-width: 800px) {
+    .play {
+        background-color: var(--blue-900);
+        padding: 5rem;
+    }
+
+    .question-num  {
+        margin-left: 3rem;
+    }
+
+    .timer {
+        margin-right: 3rem;
+    }
+
+    .options {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 3rem;
+    }
+
+    .options button {
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: clamp(1.5rem,1.5vw,2.5rem);
+    }
+}
+

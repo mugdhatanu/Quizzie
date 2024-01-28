@@ -1,0 +1,41 @@
+.question-cards {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    gap: 2rem;
+    color: var(--slate-800);
+    
+}
+
+.question-cards div {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    border-radius: 10px;
+    width: 25%;
+}
+
+.question-cards div p {
+    margin: 0.5rem;
+}
+
+.value {
+    font-size: clamp(1.5rem,2vw,2.5rem);
+}
+
+.poll-cards div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+    .question-cards {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .question-cards div {
+        width: 50%;
+    }
+}

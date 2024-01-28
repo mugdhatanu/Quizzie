@@ -1,0 +1,51 @@
+.register, .login {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    margin-top: 2rem;
+    transform: translateX(8rem);
+}
+
+
+.register div input, .login div input {
+    border-width: 0 0 2px 0;
+    border-radius: 10px 10px 0 0;
+    border-color: var(--slate-200);
+    padding: 0.5rem;
+    background-color: var(--slate-200);
+    width: 80%;
+    margin-left: 1rem;
+    width: 20vw;
+}
+
+.register .password, .login .password {
+    width: 40vw;
+    margin-left: -2rem;
+}
+
+.register .password input  {
+    width: 50%;
+}
+
+.password label {
+    transform: translateX(-2rem);
+}
+
+.confirm-pass {
+    margin-left: -6.3rem;
+}
+
+.sign-up, .login-btn {
+    width: fit-content;
+    margin-left: 6rem;
+    margin-top: 1rem;
+    background-color: var(--blue-300);
+    border: none;
+    font-family: 'Poppins',sans-serif;
+    border-radius: 8px;
+    color: var(--slate-800);
+    font-weight: 600;
+    font-size: clamp(1rem,1vw,1.5rem);
+    padding: 0.2rem 5rem;
+    cursor: pointer;
+}

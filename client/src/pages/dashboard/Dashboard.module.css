@@ -1,0 +1,16 @@
+.dashboard {
+    background-color: var(--grey-300);
+    width: 100%;
+    flex-grow: 1;
+    padding: 6rem;
+}
+
+.overlay {
+    position: absolute;
+    background-color: black;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 80%;
+}

@@ -1,0 +1,35 @@
+:root {
+  --grey-300: rgba(237, 237, 237, 1);
+  --slate-800: rgba(71, 68, 68, 1);
+  --orange-600: rgba(255, 93, 1, 1);
+  --green-600: rgba(96, 184, 75, 1);
+  --blue-600: rgba(80, 118, 255, 1);
+  --blue-900: rgba(4, 19, 37, 1);
+  --green-500: rgba(96, 184, 75, 1);
+  --blue-500: rgba(80, 118, 255, 1);
+  --gray-400: rgba(159, 159, 159, 1);
+  --red-500: rgba(255, 75, 75, 1);
+  --red-600: rgba(214, 0, 0, 1);
+  --grey-500: rgba(242, 242, 242, 1);
+  --slate-200: rgba(244, 244, 244, 1);
+  --blue-300: rgba(169, 188, 255, 1);
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.app {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100dvh;
+}
+
