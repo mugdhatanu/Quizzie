@@ -8,7 +8,6 @@ import { useModalContext } from "../../context/ModalContext";
 const Modal = ({quiz}) => {
     const {showModal} = useModalContext();
     const {setQuizDetails} = useQuizContext();
-
     useEffect(() => {
         setQuizDetails({
             name: showModal.edit ? quiz?.name: '',
@@ -21,11 +20,10 @@ const Modal = ({quiz}) => {
     },[showModal.edit]);
 
     const show = showModal.initQuiz || showModal.initQuestions;
-    
     return (
         <div className= {styles[`${show ? "modal" : ""}`]}>
             {showModal.initQuiz && !showModal.edit && <InitializeQuiz />}
-            {showModal.initQuestions && <Questions />}
+            {showModal.initQuestions && <Questions id = {quiz?._id}/>}
         </div>
     )
 }

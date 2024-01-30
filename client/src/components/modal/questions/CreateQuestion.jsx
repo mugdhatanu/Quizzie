@@ -13,19 +13,17 @@ const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}
     const isPoll = quizDetails.quizType === "Poll";
     useEffect(() => {
         const {options:allOptions} = question;
-        setOptions(allOptions);
+        setOptions(prev => (showModal.edit ? allOptions: [...prev]));
     },[question])
+
+    
 
     const updateQuestionName = (e) => {
         let questionObj = {...question,questionName: e.target.value};
-        if(showModal.edit) {
-            const updatedOptions = options.map(option=> ({...option,timesSelected: 0}));
-            questionObj = {...question,totalAttempts: 0,correctAttempts: 0,incorrectAttempts: 0,options: updatedOptions};
-        }
         const updateQuestions = questions.map(q => q.serialNum === question.serialNum ? questionObj: q);
         setQuestions(updateQuestions);
     }
-
+    
     const selectAnswer = (index) => {
         const getAllOptions = options;
         getAllOptions.forEach((_,i) => {
@@ -85,18 +83,20 @@ const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}
         
     }
 
+
+
     const displayOptions = options.map((option,i) => (
         <div key = {i} className= {`${styles["option"]} ${isPoll ? styles["poll-option"]: ""}`}>
             {!isPoll && quizDetails?.optionsType !== "Text-Image" && <button  onClick = {() => selectAnswer(i)} className= {styles["select-btn"]}>
-                <div className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`}></div>
+                <div className= {`${option.select ? styles["select"]: ""} ${(showModal.edit && checkIfAnswer(option,question.answer,false)) ? styles["select"]: ""}`}></div>
             </button>}
             {!isPoll && quizDetails?.optionsType === "Text-Image" && <button onClick = {() => selectAnswer(i)} className= {styles["select-btn"]}>
-                <div className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,true) ? styles["select"]: ""}`}></div>
+                <div className= {`${option.select ? styles["select"]: ""} ${(showModal.edit && checkIfAnswer(option,question.answer,true)) ? styles["select"]: ""}`}></div>
             </button>}
-            {quizDetails?.optionsType !== "Text-Image" && <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)} />}
+            {quizDetails?.optionsType !== "Text-Image" && <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${(showModal.edit && checkIfAnswer(option,question.answer,false)) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)} />}
             {quizDetails?.optionsType === "Text-Image" && 
             <div className= {styles["text-img"]}>
-            <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)}/>
+            <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${(showModal.edit && checkIfAnswer(option,question.answer,false)) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)}/>
             <input type = "text" value = {option.value.url} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,false)}/>
             </div>}
             {i >= 2 && <button className= {styles["delete-option"] } onClick={() => deleteOption(i)}>
@@ -107,7 +107,7 @@ const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}
 
     return (
         <div className= {`${styles["question"]} ${checkQuestionNum(index) ? "": styles["visibility"]}`}>
-            <input type = "text" placeholder = "Poll Question" value = {question.questionName} onChange = {(e) => updateQuestionName(e)} className= {styles["question-name"]}/>
+            <input type = "text" placeholder = "Question Name" value = {question.questionName} onChange = {(e) => updateQuestionName(e)} className= {styles["question-name"]}/>
             <OptionTypes />
             <div className= {styles["options-timer"]}>
                 <fieldset className= {styles["options"]}>

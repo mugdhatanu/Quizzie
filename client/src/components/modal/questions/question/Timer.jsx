@@ -6,6 +6,7 @@ import styles from './../CreateQuestion.module.css'
 const Timer = () => {
     const {quizDetails,setQuizDetails} = useQuizContext();
     const {showModal} = useModalContext(); 
+    console.log(quizDetails)
     return (
         <div className= {styles["timer"]}>
             <p>Timer </p>

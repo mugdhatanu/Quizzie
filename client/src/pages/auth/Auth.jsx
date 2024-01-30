@@ -2,12 +2,14 @@ import { useState } from "react"
 import Register from "../../components/user/Register"
 import Login from "../../components/user/Login"
 import styles from './Auth.module.css'
+import { Toaster } from "react-hot-toast"
 
 
 const Auth = () => {
     const [selectBtn,setSelectBtn] = useState({login: false, register: true});
     return (
         <div className= {styles["auth"]}>
+            <Toaster />
             <div className= {styles["auth-container"]}>
                 <h1>QUIZZIE</h1>
                 <div className= {styles["toggle-btns"]}>

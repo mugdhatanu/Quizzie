@@ -3,16 +3,21 @@ import Quiz from "./Quiz"
 import styles from './Analytics.module.css'
 import { useModalContext } from "../../context/ModalContext";
 import { useQuizzes } from "../../hooks/useQuizzes";
+import { useState } from "react";
 
 
 const Analytics = () => {
   const [quizzes] = useQuizzes();
   const {showModal} = useModalContext();
+  const [currentQuiz,setCurrentQuiz] = useState();
   const displayQuizzes = quizzes?.map((quiz,index) => (
     <Quiz 
     key = {quiz._id}
-    quiz = {quiz} 
-    index = {index} 
+    quiz = {quiz}
+    id = {quiz._id}
+    index = {index}
+    currentQuiz = {currentQuiz}
+    setCurrentQuiz = {setCurrentQuiz} 
     />
   ))
   const show = showModal.initQuestions || showModal.initQuiz;

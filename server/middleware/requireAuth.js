@@ -15,20 +15,26 @@ const requireAuth = async (req,res,next) => {
             error.status = 403;
             next(error);
         } else {
-            const idObj = jwt.verify(token,process.env.SECRET);
-            const {userId: _id} = idObj;
-            const user = await User.findById(_id);
-            if(user) {
-                req.headers["user"] = user;
-                next();
-            } else {
-                const error = new Error("User not found");
-                error.status = 404;
+            if(token === "null") {
+                const error = new Error("Invalid token received");
+                error.status = 403;
                 next(error);
+            } else {
+                const idObj = jwt.verify(token,process.env.SECRET);
+                const {userId: _id} = idObj;
+                const user = await User.findById(_id);
+                if(user) {
+                    req.headers["user"] = user;
+                    next();
+                } else {
+                    const error = new Error("User not found");
+                    error.status = 404;
+                    next(error);
+                }
             }
+            
         }
     }
-    
 }
 
 module.exports = requireAuth

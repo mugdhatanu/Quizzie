@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const generateHash = require('./../utils/generateHash');
+const {generateHash,verifyPassword} = require('../utils/encryptPassword');
 
 
 
@@ -16,24 +16,27 @@ const UserSchema = new Schema({
 UserSchema.statics.register = async function (userDetails) {
     const {userName, email,password} = userDetails;
     if(!userName || !email || !password) {
-        const error = new Error("All fields are required");
+        const error = new Error();
+        error.msg = "All fields are required";
         error.status = 400;
         throw error;
     }
     if(!validator.isEmail(email)) {
-        const error = new Error("Please enter a valid email");
+        const error = new Error();
+        error.msg = "Please enter a valid email";
         error.status = 400;
         throw error;
     }
     try {
         const user = await this.findOne({email});
         if(user) {
-            const error = new Error("User already exists");
+            const error = new Error();
+            error.msg = "User already exists";
             error.status = 400;
             throw error;
         }
     } catch(err) {
-        throw Error("Error fetching user in database");
+        throw Error(err.msg);
     }
     const hash = await generateHash(password);
     if(hash) {
@@ -41,35 +44,46 @@ UserSchema.statics.register = async function (userDetails) {
             const user = await this.create({userName,email,password: hash});
             return user;
         } catch(err) {
-            throw Error("Error creating user");
+            throw Error(err.msg);
         }
     } else {
-        throw Error("Error encrypting password");
+        throw Error(err.msg);
     }
 }
 
 UserSchema.statics.login = async function (userDetails) {
     const {email,password} = userDetails;
     if(!email || !password) {
-        const error = new Error("All fields are required");
+        const error = new Error();
+        error.msg = "All fields are required";
         error.status = 400;
         throw error;
     }
     if(!validator.isEmail(email)) {
-        const error = new Error("Please enter a valid email");
+        const error = new Error();
         error.status = 400;
+        error.msg = "Please enter a valid email";
         throw error;
     }
     try {
         const user = await this.findOne({email});
         if(!user) {
-            const error = new Error("User doesnt exist");
+            const error = new Error();
             error.status = 404;
+            error.msg = "User doesnt't exist";
             throw error;
         }
-        return user;  
+        const verify = await verifyPassword(password,user.password);
+        if(verify) {
+            return user;
+        } else {
+            const error = new Error();
+            error.status = 400;
+            error.msg = "Incorrect Password"
+            throw error;
+        }
     } catch(err) {
-        throw Error("Error fetching user in database");
+        throw Error(err.msg);
     } 
 }
 

@@ -15,4 +15,12 @@ const generateHash = async (password) => {
     } 
 }
 
-module.exports = generateHash;
+const verifyPassword = async(password,encryptedPass) => {
+    try {
+        return verify = await bcrypt.compare(password,encryptedPass)
+    } catch(err) {
+        return null
+    }
+}
+
+module.exports = {generateHash,verifyPassword};

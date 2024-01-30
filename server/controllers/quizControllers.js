@@ -82,9 +82,38 @@ const deleteQuiz = async(req,res,next) => {
 }
 
 const editQuiz = async(req,res,next) => {
-    const {quiz_id,questions} = req.body;
+    const {quiz_id,updatedData} = req.body;
     try {
-        const quiz = await Quiz.findOne({_id: quiz_id});
+        let quiz = await Quiz.findOne({_id: quiz_id});
+        const {questions, optionsType} = quiz;
+        let updatedQuestions = questions.map(question => {
+            let updatedQuestion = updatedData.find(uq => uq._id === String(question._id));
+            let hasOptionChanged = false;
+            if(optionsType === 'Text-Image') {
+                hasOptionChanged = question.options.some((option, index) => {
+                    return updatedQuestion.options[index].value.text !== option.value.text || 
+                           updatedQuestion.options[index].value.url !== option.value.url;
+                });
+            } else {
+                hasOptionChanged = question.options.some((option, index) => {
+                    return updatedQuestion.options[index].value.text !== option.value.text;
+                });
+            }
+            if(updatedQuestion.questionName !== question.questionName || hasOptionChanged) {
+                updatedQuestion.options.forEach(option => {
+                    option.timesSelected = 0;
+                });
+                updatedQuestion.totalAttempts = 0;
+                    updatedQuestion.correctAttempts = 0;
+                    updatedQuestion.incorrectAttempts = 0;
+                return updatedQuestion;
+            }
+            else {
+                return question;
+            }
+        });
+        quiz.questions = updatedQuestions;
+        await quiz.save();
         res.status(200).json({msg: "Successfully updated quiz"});
     } catch(err) {
         next(err);

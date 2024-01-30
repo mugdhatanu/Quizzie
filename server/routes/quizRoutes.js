@@ -22,7 +22,7 @@ router.patch('/edit',requireAuth,editQuiz);
 router.delete('/:quiz_id',requireAuth,deleteQuiz);
 router.get('/questions',requireAuth,totalQuestions);
 router.get('/:quiz_id/questions',requireAuth, quizQuestions);
-router.patch('/:quiz_id/',requireAuth,answerQuestions);
+router.patch('/:quiz_id',answerQuestions);
 
 
 

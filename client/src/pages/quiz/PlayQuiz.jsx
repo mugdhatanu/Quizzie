@@ -1,5 +1,4 @@
 import styles from './PlayQuiz.module.css';
-import Result from '../../components/quiz/Result';
 import AnswerQuestions from '../../components/quiz/AnswerQuestions';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,7 +7,6 @@ import { useQuizDetails } from '../../hooks/useQuizDetails';
 
 
 const PlayQuiz = () => {
-  const [answersSubmitted,setAnswersSubmitted] = useState(false);
   const [quiz,setQuiz] = useState(null);
   const {quiz_id} = useParams();
   const quizDetails = useQuizDetails(quiz_id);
@@ -20,10 +18,10 @@ const PlayQuiz = () => {
         const getQuiz = await getQuizDetails(quiz_id);
         setQuiz(getQuiz);
     }
-    // const increaseImpressions = async () => {
-    //   await updateImpressions(quiz_id);
-    // }
-    // increaseImpressions();
+    const increaseImpressions = async () => {
+      await updateImpressions(quiz_id);
+    }
+    increaseImpressions();
     fetchDetails();
   },[]);
 
@@ -40,8 +38,6 @@ const PlayQuiz = () => {
 
   return (
     <div className= {styles["play"]}>
-      {answersSubmitted ? 
-      <Result /> : 
       <AnswerQuestions 
       quiz = {quiz} 
       questions = {quiz?.questions} 
@@ -49,7 +45,7 @@ const PlayQuiz = () => {
       setQuestionAnalysis = {setQuestionAnalysis}
       pollAnalysis = {pollAnalysis}
       setPollAnalysis = {setPollAnalysis}
-      />}
+      />
     </div>
   )
 }

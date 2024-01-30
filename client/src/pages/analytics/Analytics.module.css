@@ -40,6 +40,9 @@
     border-bottom-right-radius: 10px;
 }
 
+.background {
+    background-color: var(--blue-200);
+}
 
 .quiz td {
     padding: 0.5rem;

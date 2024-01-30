@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import styles from './AnswerPage.module.css';
 import Result from './Result';
 import { selectAnswers } from '../../apis/quiz';
@@ -10,11 +10,30 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
   const [selectedOption, setSelectedOption] = useState({text: '', url: ''});
   const [selectedPollOption,setSelectedPollOption] = useState();
   const [prevScore,setPrevScore] = useState(0);
+  const [startTimer,setStartTimer] = useState(false);
+  const [timer,setTimer] = useState(0);
   
+  useEffect(() => {
+    setTimer((!quiz?.timer || quiz?.timer === "OFF") ? 0 : Number(quiz?.timer));
+  },[quiz])
 
-  const submit = (question) => {
+  useEffect(() =>{
+    if (timer > 0) {
+      setStartTimer(true);
+      const timeout = setTimeout(() => setTimer(prev => prev-1), 1000);
+      return () => {
+        setStartTimer(false);
+        clearTimeout(timeout);
+      }
+    } 
+  },[timer])
+
+  
+  const submit = (question,isAutoSelected) => {
     const {quizType,_id: quizId} = quiz;
-    nextQuestion(question);
+    nextQuestion(question,isAutoSelected);
+    setTimer(0);
+    setStartTimer(false);
     const finalData = quizType === "Poll" ? pollAnalysis : questionAnalysis;
     setShowResult(true);
     selectAnswers(quizId,finalData);
@@ -66,32 +85,72 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
         return (option.value.text === selectedOption.text && option.value.url === selectedOption.url)? { border: "2px solid blue" }: {};
       }
     } else {
-      return option._id === selectedOption._id ? { border: "2px solid blue" }: {};
+      return option._id === selectedPollOption?._id ? { border: "2px solid blue" }: {};
     }
   }
 
-
-  const nextQuestion = (question) => {
-    const {quizType} = quiz;
-    const {options, _id: questionId} = question; 
-    if(quizType !== "Poll") {
-      setCurrentQuestion(prev => prev+1);
-      const updateQuestion = questionAnalysis.find(question => question.questionId === questionId);
-      updateQuestion.totalAttempts++;
-      if(prevScore === score) {
-        updateQuestion.incorrectAttempts++;
-      } else {
-        updateQuestion.correctAttempts++;
-      }
-      const updatedData = questionAnalysis.filter(question => question.questionId === questionId ? updateQuestion :question);
-      setQuestionAnalysis(updatedData);
-      setPrevScore(score);
+  const nextQuestion = (question,isAutoSelected) => {
+    if(isAutoSelected) {
+        let updateQuestion;
+        for(const ques of questionAnalysis) {
+          if(ques.questionId === question._id) {
+            updateQuestion = ques;
+            break;
+          }
+        }
+        if(updateQuestion) {
+          updateQuestion.totalAttempts++;
+          updateQuestion.incorrectAttempts++;
+          const updatedData = questionAnalysis.filter(question => question.questionId === question._id ? updateQuestion :question);
+          setQuestionAnalysis(updatedData);
+          setCurrentQuestion(prev => prev+1);
+          setTimer(quiz?.timer);
+        }
     } else {
-      const updatedOptions = options.map(option => option._id === selectedPollOption._id ? selectedPollOption : option);
-      setPollAnalysis(updatedOptions);
+      const {quizType} = quiz;
+      const {options, _id: questionId} = question; 
+      if(quizType !== "Poll") {
+        setTimer(quiz?.timer);
+        setCurrentQuestion(prev => prev+1);
+        const updateQuestion = questionAnalysis.find(question => question.questionId === questionId);
+        updateQuestion.totalAttempts++;
+        if(prevScore === score) {
+          updateQuestion.incorrectAttempts++;
+        } else {
+          updateQuestion.correctAttempts++;
+        }
+        const updatedData = questionAnalysis.filter(question => question.questionId === questionId ? updateQuestion :question);
+        setQuestionAnalysis(updatedData);
+        setPrevScore(score);
+      } else {
+        const updatedOptions = options.map(option => option._id === selectedPollOption._id ? selectedPollOption : option);
+        setPollAnalysis(updatedOptions);
+      }
     }
   }
+  
 
+ useEffect(() => {
+  const moveToNext = () => {
+    if(quiz) {
+      const {quizType} = quiz;
+      if(quizType !== "Poll") {
+        if(startTimer && timer === 0) {
+          const currentQuestionObj = questions.find(question => question.serialNum === currentQuestion);
+          if(currentQuestion === questions[questions.length -1].serialNum) {
+            
+            submit(currentQuestionObj,true);
+          } else {
+            nextQuestion(currentQuestionObj,true);
+          }
+        }
+      }
+    }
+  }
+    moveToNext();
+  },[quiz,timer]);
+
+console.log(questionAnalysis);
 
   const displayOptions = (question,options) => {
     if(quiz?.optionsType !== "Text-Image") {
@@ -111,15 +170,15 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
       <section className = {styles["quiz-section"]}>
         <header>
             <p className= {styles["question-num"]}>0{question.serialNum}/0{questions?.length}</p>
-            {quiz?.timer !== "OFF" && <p className= {styles["timer"]}>00:10s</p>}
+            {quiz?.timer !== "OFF" && <p className= {styles["timer"]}>00:0{timer}s</p>}
         </header>
         <main>
             <h3 className= {styles["question-text"]}>Your question text comes here, its a sample text.</h3>
             <div className= {styles["options"]}>
             {displayOptions(question,question.options)}
             </div>
-            {currentQuestion !== questions?.length && <button className= {styles["next"]} onClick={() => nextQuestion(question)}>NEXT</button>}
-            {currentQuestion === questions?.length &&  <button className= {styles["next"]} onClick={() => submit(question)}>SUBMIT</button>}
+            {currentQuestion !== questions?.length && <button className= {styles["next"]} onClick={() => nextQuestion(question,false)}>NEXT</button>}
+            {currentQuestion === questions?.length &&  <button className= {styles["next"]} onClick={() => submit(question,false)}>SUBMIT</button>}
         </main>
       </section>}
     </Fragment>

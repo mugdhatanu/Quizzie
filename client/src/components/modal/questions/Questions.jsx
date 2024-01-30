@@ -1,27 +1,29 @@
 import { useEffect, useState } from "react"
 import CreateQuestion from "./CreateQuestion";
-import { addNewQuiz, getQuizDetails } from "../../../apis/quiz";
+import { addNewQuiz, getQuizDetails, updateQuiz } from "../../../apis/quiz";
 import { useQuizContext } from "../../../context/QuizContext";
 import { useModalContext } from "../../../context/ModalContext";
 import styles from './Questions.module.css';
 import CrossIcon from './../../../assets/cross.png';
 
-const Questions = () => {
+const Questions = ({id}) => {
     const {setQuizzes,quizDetails,setQuizDetails} = useQuizContext();
     const {showModal,setShowModal} = useModalContext();
     const [clickedQuestion,setClickedQuestion] = useState(1);
     const {questions: quizQuestions} = quizDetails;
     const [questions,setQuestions] = useState([{serialNum: 1,options: [], answer: '',questionName: ''}]);
-    const btns = new Array(quizQuestions.length).fill().map((_, i) => i + 1);
-    const [createQuizBtns,setCreateQuizBtns] = useState(quizQuestions ? btns: [1]);
+    const btns = new Array(quizQuestions?.length).fill().map((_, i) => i + 1);
+    const [createQuizBtns,setCreateQuizBtns] = useState([1]);
     const [created,setCreated] = useState(false);
     const [quizId,setQuizId] = useState('');
 
     useEffect(() => {
         const ques = showModal.edit ? quizQuestions: questions;
+        const updateBtns = showModal.edit ? btns: [1];
+        setCreateQuizBtns(updateBtns);
         setQuestions(ques);
     },[quizDetails]);
-    
+
 
     const addQuestion = () => {
         if(questions.length < 5) {
@@ -44,7 +46,7 @@ const Questions = () => {
         return clickedQuestion === index + 1; 
     }
     
-    const displayQuestions = questions.map((question,index) => (
+    const displayQuestions = questions?.map((question,index) => (
         <CreateQuestion 
         key = {index}
         index = {index}
@@ -63,6 +65,12 @@ const Questions = () => {
         
     ))
 
+    const editQuiz = async () => {
+        const quiz = {...quizDetails,questions};
+        console.log(id,quiz);
+        updateQuiz(id,quiz);
+    }
+
     const createQuiz = async () => {
         const quiz = {...quizDetails,questions};
         const isPoll = quizDetails.quizType === "Poll";
@@ -72,7 +80,7 @@ const Questions = () => {
         }
         setQuizDetails(prev => ({...prev,questions}));
         try {
-            const newQuiz = await addNewQuiz(quiz);
+            const {quiz: newQuiz} = await addNewQuiz(quiz);
             setQuizId(newQuiz._id);
             const time = new Date();
             const updatedQuiz = {...quiz,createdAt: time};
@@ -89,14 +97,15 @@ const Questions = () => {
                 <div className= {styles["display-btns"]}>
                     <div className= {styles["btns"]}>
                         {displayBtns}
-                        {questions.length < 5 && <button disabled = {showModal.edit} onClick = {addQuestion} className= {styles["add"]}>+</button>}
+                        {questions?.length < 5 && <button disabled = {showModal.edit} onClick = {addQuestion} className= {styles["add"]}>+</button>}
                     </div>
                     <p>Max 5 questions</p>
                 </div>
                 {displayQuestions}
                 <div className= {styles["create-buttons"]}>
                     <button onClick={() => setShowModal({initQuiz: false,initQuestions: false})}>Cancel</button>
-                    <button onClick={createQuiz} className= {styles["create"]}>{showModal.edit ? "Edit": "Create"} Quiz</button>
+                    {!showModal.edit && <button onClick={createQuiz} className= {styles["create"]}>Create Quiz</button>}
+                    {showModal.edit && <button onClick={editQuiz} className= {styles["create"]}>Edit Quiz</button>}
                 </div>
             </div>} 
             {created && 
@@ -105,7 +114,7 @@ const Questions = () => {
                     <img src = {CrossIcon} alt = "Cross Icon" onClick={() => setShowModal({initQuiz: false,initQuestions: false})}/>
                 </div>
                 <h3>Congrats your Quiz is <br/>Published!</h3>
-                <div className= {styles["link"]}>{quizId || "Your Link here"}</div>
+                <div className= {styles["link"]}>{`http://localhost:5173/quizzes/${quizId}` || "Your Link here"}</div>
                 <button onClick={() => navigator.clipboard.writeText(`http://localhost:5173/quizzes/${quizId}`)}>Share</button>
             </div>}
         </>

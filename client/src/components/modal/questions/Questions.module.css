@@ -96,8 +96,19 @@
     width: 60%;  
     padding: 0.5rem 1rem;
     border-radius: 10px;
+    overflow-x: scroll;
 }
 
+.link::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+.link::-webkit-scrollbar-thumb {
+    background-color: var(--gray-400);
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+}
 .close {
     width: 100%;
     display: flex;
