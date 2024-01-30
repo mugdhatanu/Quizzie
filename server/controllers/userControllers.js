@@ -1,12 +1,14 @@
 const User = require('./../models/user');
 const generateToken = require('./../utils/generateToken');
+const tokenExpiry = require('./../utils/tokenExpiry');
 
 const userForm = async(req,res,next,toRegister,msg) => {
-    const {userName,password,email} = req.body;
+    const {name: userName,password,email} = req.body;
     try {
         const user = toRegister ? await User.register({userName,password,email}): await User.login({email,password});
         const token = generateToken(user._id);
-        res.status(201).json({msg, token});
+        const expiry = tokenExpiry(token);
+        res.status(201).json({msg, token, exp: expiry});
     } catch(err) {
         next(err);
     }

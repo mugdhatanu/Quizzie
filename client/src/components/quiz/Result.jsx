@@ -2,8 +2,8 @@ import styles from './AnswerPage.module.css';
 import TrophyIcon from './../../assets/trophy.png';
 
 
-const Result = () => {
-  const quizType = "Question";
+const Result = ({score,quiz,questions}) => {
+  const {quizType} = quiz;
   return (
     <section className= {styles["result"]}>
        {quizType === "Poll" ? 
@@ -14,7 +14,7 @@ const Result = () => {
          <img src = {TrophyIcon} alt= 'Trophy Icon' />
          <div className= {styles["score"]}>
           <p>Your score is</p>
-          <p>03/04</p>
+          <p>0{score}/0{questions.length}</p>
          </div>
        </>
        }

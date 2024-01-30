@@ -1,7 +1,8 @@
 import styles from './Cards.module.css'
 
 const PollCards = ({question}) => {
-    const displayOptions = question?.options((option,index) => (
+   
+    const displayOptions = question?.options.map((option,index) => (
         <div>
             <p className= {styles["value"]}>{option.timesSelected}</p>
             <p>Option {index+1}</p>

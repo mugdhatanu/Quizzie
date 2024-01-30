@@ -1,9 +1,10 @@
 import axios from 'axios'
-const quiz_url = import.meta.env.VITE_QUIZ_BACKEND_URL
+import getValueFromLocal from '../utils/localStorage/getValueFromLocal';
+const quiz_url = import.meta.env.VITE_QUIZ_BACKEND_URL || 'http://localhost:3000/quizzes'
 
 const options = {
     headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE5MTQ4OGQ3YzM2MWI2YzI3NzBhMDkiLCJpYXQiOjE3MDU4NDk1NzZ9.hODiahwsobUngQi9ldfm7APLcp-Lqz0v8B08gzRSKrw"
+        Authorization: "Bearer " + getValueFromLocal()
     }
 }
 
@@ -21,7 +22,7 @@ export const addNewQuiz = async(quiz) => {
     if(quizType === "Poll") quiz.timer = "OFF";
     try {
         const res = await axios.post(`${quiz_url}/create`,quiz,options);
-        console.log(res.data);
+        return res.data;
     } catch(err) {
         console.log(err);
     }
@@ -53,3 +54,31 @@ export const getQuizDetails = async (quizId) => {
         console.log(err);
     }
 }
+
+export const updateImpressions = async(quizId) => {
+    try {
+        const res = await axios.patch(`${quiz_url}/${quizId}/impressions`,{},options);
+        return res.data;
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+export const getDetails = async() => {
+    try {
+        const res = await axios.get(`${quiz_url}/details`,options);
+        return res.data;
+    } catch(err) {
+        throw Error(err);
+    }
+}
+
+export const selectAnswers = async(quizId,data) => {
+    try{
+        const res = await axios.patch(`${quiz_url}/${quizId}`,{questionAnalysis: data},options);
+        console.log(res.data);
+    } catch(err) {
+        console.log(err);
+    }
+}
+

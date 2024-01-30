@@ -14,6 +14,10 @@ const Sidebar = () => {
     setShowModal({initQuiz: false,initQuestions: false, edit: false})
     navigate(route);
   }
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/")
+  }
   return (
     <div className = {`${styles["sidebar"]} ${show ? "": styles["hide"]}`}>
       <h1>QUIZZIE</h1>
@@ -24,7 +28,7 @@ const Sidebar = () => {
       </div>
       <div className= {styles["logout"]}>
         <hr className= {styles["line"]}/>
-        <button>LOGOUT</button>
+        <button onClick={logout}>LOGOUT</button>
       </div>
     </div>
   )

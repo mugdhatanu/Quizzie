@@ -2,10 +2,11 @@ import { useQuizContext } from "../../context/QuizContext"
 import Quiz from "./Quiz"
 import styles from './Analytics.module.css'
 import { useModalContext } from "../../context/ModalContext";
+import { useQuizzes } from "../../hooks/useQuizzes";
 
 
 const Analytics = () => {
-  const {quizzes} = useQuizContext();
+  const [quizzes] = useQuizzes();
   const {showModal} = useModalContext();
   const displayQuizzes = quizzes?.map((quiz,index) => (
     <Quiz 

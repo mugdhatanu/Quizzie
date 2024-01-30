@@ -1,5 +1,4 @@
 const Quiz = require('./../models/quiz');
-const {poll,qna} = require('./../utils/analytics');
 
 
 
@@ -29,16 +28,19 @@ const getQuizDetails = async(req,res,next) => {
     }
 }
 
-const totalImpressions = async(req,res,next) => {
+
+const quizCardDetails = async(req,res,next) => {
+    const {_id: user_id} = req["headers"].user;
     try {
-        const quizzes = await Quiz.find({});
-        let impressions = 0;
-        if(quizzes.length) {
-            for(const quiz of quizzes) {
-                impressions += quiz.impressions;
-            }
+        const quizzes = await Quiz.find({userId: user_id});
+        let totalQuestions = 0;
+        let totalImpressions = 0;
+        for(const quiz of quizzes) {
+            let {questions,impressions} = quiz;
+            totalQuestions += questions.length;
+            totalImpressions += impressions;
         }
-        res.status(200).json({impressions});
+        res.status(200).json({totalQuizzes: quizzes.length, totalQuestions, totalImpressions});
     } catch(err) {
         next(err);
     }
@@ -61,9 +63,8 @@ const createQuiz = async(req,res,next) => {
     const {_id:user_id} = req["headers"].user;
     try {
         const quiz = await Quiz.create({userId: user_id,name,quizType,optionsType,timer,questions});
-        quiz.route = `quizzes/play/${quiz._id}`;
         quiz.save();
-        res.status(201).json({msg: "Successfully created quiz",quizRoute: quiz.route});
+        res.status(201).json({msg: "Successfully created quiz",quiz});
     } catch(err) {
         next(err);
     }
@@ -81,9 +82,9 @@ const deleteQuiz = async(req,res,next) => {
 }
 
 const editQuiz = async(req,res,next) => {
-    const {name,quizType,optionsType,timer,questions,_id} = req.body;
+    const {quiz_id,questions} = req.body;
     try {
-        await Quiz.findByIdAndUpdate(_id,{name,quizType,optionsType,timer,questions});
+        const quiz = await Quiz.findOne({_id: quiz_id});
         res.status(200).json({msg: "Successfully updated quiz"});
     } catch(err) {
         next(err);
@@ -121,15 +122,27 @@ const quizQuestions = async(req,res,next) => {
     }
 }
 
-const answerQuestion = async(req,res,next) => {
-    const {user_answer} = req.body;
-    const {quiz_id,question_id} = req.params;
+const answerQuestions = async(req,res,next) => {
+    const {questionAnalysis} = req.body;
+    const {quiz_id} = req.params;
     try {
         const quiz = await Quiz.findOne({_id: quiz_id});
         if(quiz) {
             const {quizType,questions} = quiz;
-            const question = questions.find(question => question._id = question_id);
-            quizType === "Poll" ? poll(question, user_answer) : qna(question,user_answer);
+            for(const analysisObj of questionAnalysis) {
+                const question = questions.find(question => String(question._id) === analysisObj.questionId);
+                if(quizType !== "Poll") {
+                    question.$set({
+                        totalAttempts: analysisObj.totalAttempts,
+                        correctAttempts: analysisObj.correctAttempts,
+                        incorrectAttempts: analysisObj.incorrectAttempts
+                      });   
+                } else {
+                    question.$set({
+                        options: analysisObj.options
+                    });
+                }
+            }
             quiz.save();
             res.status(201).json({msg: "Answered Question"});
         } else {
@@ -145,12 +158,12 @@ const answerQuestion = async(req,res,next) => {
 module.exports = {
     getAllQuizzes,
     getQuizDetails,
-    totalImpressions,
+    quizCardDetails,
     increaseQuizImpressions,
     createQuiz,
     deleteQuiz,
     editQuiz,
     totalQuestions,
     quizQuestions,
-    answerQuestion,
+    answerQuestions,
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from './CreateQuestion.module.css'
 import DeleteIcon from './../../../assets/delete.png'
 import Timer from "./question/Timer";
@@ -9,17 +9,22 @@ import { useModalContext } from "../../../context/ModalContext";
 const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}) => {
     const {quizDetails} = useQuizContext();
     const {showModal} = useModalContext();
-    const {options:allOptions} = question;
-    const [options,setOptions] = useState(allOptions.length ? allOptions: [{serialNum: 1,select: false, value: {text: '', url:''}},{serialNum:2, select: false, value: {text: '', url:''}}]);
+    const [options,setOptions] = useState([{serialNum: 1,select: false, value: {text: '', url:''}},{serialNum:2, select: false, value: {text: '', url:''}}]);
     const isPoll = quizDetails.quizType === "Poll";
-
+    useEffect(() => {
+        const {options:allOptions} = question;
+        setOptions(allOptions);
+    },[question])
 
     const updateQuestionName = (e) => {
-        const questionObj = {...question,questionName: e.target.value};
+        let questionObj = {...question,questionName: e.target.value};
+        if(showModal.edit) {
+            const updatedOptions = options.map(option=> ({...option,timesSelected: 0}));
+            questionObj = {...question,totalAttempts: 0,correctAttempts: 0,incorrectAttempts: 0,options: updatedOptions};
+        }
         const updateQuestions = questions.map(q => q.serialNum === question.serialNum ? questionObj: q);
         setQuestions(updateQuestions);
     }
-
 
     const selectAnswer = (index) => {
         const getAllOptions = options;
@@ -46,30 +51,53 @@ const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}
         })
         setOptions(getAllOptions);
         const optionValues = getAllOptions.map(option => ({value: option.value}));
-        const questionObj  = {...question,options: optionValues};  
+        let questionObj  = {...question,options: optionValues};
+        if(showModal.edit) {
+            const updatedOptions = options.map(option=> ({...option,timesSelected: 0}));
+            questionObj = {...question,totalAttempts: 0,correctAttempts: 0,incorrectAttempts: 0,options: updatedOptions};
+        }  
         const updateQuestions = questions.map(q => q.serialNum === question.serialNum ? questionObj: q);
-        setQuestions(updateQuestions);
+        setQuestions(updateQuestions);  
     }
+
     const addOption = () =>{
-        const num = options[options.length-1].serialNum;
-        if(options.length < 4) {
-            setOptions(prev => [...prev,{serialNum: num+1,select: false, value: ''}])
+        if(!showModal.edit) {
+            const num = options[options.length-1].serialNum;
+            if(options.length < 4) {
+                setOptions(prev => [...prev,{serialNum: num+1,select: false, value: ''}])
+            }
         }
+        
     }
     const deleteOption = (index) => {
-        const updatedOptions = options.filter(option => option.serialNum !== index +1);
-        setOptions(updatedOptions);
+        if(!showModal.edit) {
+            const updatedOptions = options.filter(option => option.serialNum !== index +1);
+            setOptions(updatedOptions);
+        } 
     }
+
+    const checkIfAnswer = (option,answer, isTextImg) => {
+        if(!isTextImg) {
+            return option.value.text === answer.text
+        } else {
+            return (option.value.text === answer.text && option.value.url === answer.url);
+        }
+        
+    }
+
     const displayOptions = options.map((option,i) => (
         <div key = {i} className= {`${styles["option"]} ${isPoll ? styles["poll-option"]: ""}`}>
-            {!isPoll && <button onClick = {() => selectAnswer(i)} className= {styles["select-btn"]}>
-                <div className= {option.select ? styles["select"]: ""}></div>
+            {!isPoll && quizDetails?.optionsType !== "Text-Image" && <button  onClick = {() => selectAnswer(i)} className= {styles["select-btn"]}>
+                <div className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`}></div>
             </button>}
-            {quizDetails?.optionsType !== "Text-Image" && <input type = "text" value = {option.value.text} className= {option.select ? styles["select"]: ""} onChange = {(e) => optionValue(e,i,true)}/>}
+            {!isPoll && quizDetails?.optionsType === "Text-Image" && <button onClick = {() => selectAnswer(i)} className= {styles["select-btn"]}>
+                <div className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,true) ? styles["select"]: ""}`}></div>
+            </button>}
+            {quizDetails?.optionsType !== "Text-Image" && <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)} />}
             {quizDetails?.optionsType === "Text-Image" && 
             <div className= {styles["text-img"]}>
-            <input type = "text" value = {option.value.text} className= {option.select ? styles["select"]: ""} onChange = {(e) => optionValue(e,i,true)}/>
-            <input type = "text" value = {option.value.url} className= {option.select ? styles["select"]: ""} onChange = {(e) => optionValue(e,i,false)}/>
+            <input type = "text" value = {option.value.text} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,true)}/>
+            <input type = "text" value = {option.value.url} className= {`${option.select ? styles["select"]: ""} ${checkIfAnswer(option,question.answer,false) ? styles["select"]: ""}`} onChange = {(e) => optionValue(e,i,false)}/>
             </div>}
             {i >= 2 && <button className= {styles["delete-option"] } onClick={() => deleteOption(i)}>
             <img src = {DeleteIcon} alt = "Delete Icon" />
@@ -86,7 +114,7 @@ const CreateQuestion = ({index,question,questions,setQuestions,checkQuestionNum}
                 {displayOptions}
                 {options.length < 4 && <button disabled = {showModal.edit} onClick = {addOption} className= {`${styles["add-option"]} ${isPoll ? styles['poll-btn']: ""}`}>Add Option</button>}
                 </fieldset>
-                {!isPoll && <Timer />}
+                {!isPoll &&  <Timer />}
             </div>
         </div>
     )}

@@ -2,6 +2,7 @@
     width: 100%;
 }
 
+
 @media screen and (min-width: 800px) {
     .play {
         background-color: var(--blue-900);

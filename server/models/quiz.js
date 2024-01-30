@@ -17,6 +17,7 @@ const QuestionSchema = new Schema({
     questionName: {type: String, required: true},
     options: {type: [OptionSchema], required: true},
     answer: {type: ValueSchema},
+    serialNum: {type: Number, default: 1},
     totalAttempts: {type: Number,default: 0},
     correctAttempts: {type: Number,default: 0},
     incorrectAttempts: {type: Number,default: 0}
@@ -25,7 +26,6 @@ const QuestionSchema = new Schema({
 const QuizSchema = new Schema({
     _id: {type: mongoose.Schema.Types.ObjectId, auto: true},
     name: {type: String, required: true},
-    route: {type: String},
     impressions: {type: Number, default: 0},
     quizType: {type: String, enum: ['Question','Poll'],required: true},
     userId: { type: Schema.Types.ObjectId, ref: 'User',required: true},

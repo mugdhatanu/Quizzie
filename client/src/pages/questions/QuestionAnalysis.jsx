@@ -7,23 +7,14 @@ import styles from './QuestionAnalysis.module.css'
 import { useParams } from 'react-router-dom';
 import { getQuizDetails } from '../../apis/quiz';
 import timestamp from './../../utils/timestamp';
+import { useQuizDetails } from '../../hooks/useQuizDetails';
 
 
 const QuestionAnalysis = () => {
     const {showModal} = useModalContext();
     const show = showModal.initQuestions || showModal.initQuiz;
-    const [quizDetails,setQuizDetails] = useState(null);
     const {quiz_id} = useParams();
-    useEffect(() => {
-        const fetchDetails = async () => {
-            const quiz = await getQuizDetails(quiz_id);
-            setQuizDetails(quiz);
-        }
-        fetchDetails();
-    },[]);
-
-   
-
+    const quizDetails = useQuizDetails(quiz_id);
     const displayCards = quizDetails?.questions?.map((question,index) => (
         <div key = {question._id}>
             <p className= {styles["question-title"]}>Q.{index+1} {question.questionName} ?</p>

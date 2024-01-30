@@ -9,6 +9,7 @@ import { deleteQuiz } from "../../apis/quiz"
 import { useQuizContext } from "../../context/QuizContext"
 import Modal from "../../components/modal/Modal"
 import { useModalContext } from "../../context/ModalContext"
+import { formatImpressionCount } from './../../utils/impression';
 
 
 
@@ -48,7 +49,7 @@ const Quiz = ({quiz,index}) => {
                 <td>{index+1}</td>
                 <td>{quiz.name}</td>
                 <td>{timestamp(quiz.createdAt)}</td>
-                <td>{quiz.impressions}</td>
+                <td>{formatImpressionCount(quiz.impressions)}</td>
                 <td className={styles["buttons"]}>
                     <button onClick={() => setShowModal({initQuiz: false,initQuestions: true, edit: true})}>
                         <img src = {EditIcon} alt = "Edit Icon" />
@@ -56,7 +57,7 @@ const Quiz = ({quiz,index}) => {
                     <button onClick={() => setDeleteBox(true)}>
                         <img src = {DeleteIcon} alt = "Delete Icon" />
                     </button>
-                    <button>
+                    <button onClick={() => navigator.clipboard.writeText(`http://localhost:5173/quizzes/${quiz._id}`)}>
                         <img src = {ShareIcon} alt = "Share Icon" />
                     </button>
                 </td>
