@@ -108,7 +108,7 @@ export const getDetails = async() => {
 
 export const selectAnswers = async(quizId,data) => {
     try{
-        const res = await axios.patch(`${quiz_url}/${quizId}`,{questionAnalysis: data});
+        const res = await axios.patch(`${quiz_url}/answer/${quizId}`,{questionAnalysis: data});
         console.log(res.data);
     } catch(err) {
         console.log(err);

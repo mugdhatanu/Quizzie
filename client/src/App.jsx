@@ -25,7 +25,7 @@ function App() {
             <Route path = "/dashboard" element = {<ProtectedRoutes><Dashboard/></ProtectedRoutes>} />
             <Route path = "/analytics" element = {<ProtectedRoutes><Analytics/></ProtectedRoutes>} />
             <Route path= "/analytics/:quiz_id" element = {<ProtectedRoutes><QuestionAnalysis /></ProtectedRoutes>} />
-            <Route path= "/quizzes/:quiz_id" element = {<PlayQuiz />} />
+            <Route path= "/quizzes/play/:quiz_id" element = {<PlayQuiz />} />
           </Routes>
         </Router>
     </div>

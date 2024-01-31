@@ -7,7 +7,7 @@ import styles from './Questions.module.css';
 import CrossIcon from './../../../assets/cross.png';
 import { checkDetails, checkIdentical } from "../../../utils/validation/quizForm";
 import { shareLink } from "../../../utils/quizToast";
-const quiz_url = import.meta.env.VITE_QUIZ_BACKEND_URL || 'http://localhost:3000/quizzes'
+
 
 
 const Questions = ({id}) => {
@@ -151,7 +151,7 @@ const Questions = ({id}) => {
                     <img src = {CrossIcon} alt = "Cross Icon" onClick={() => setShowModal({initQuiz: false,initQuestions: false})}/>
                 </div>
                 <h3>Congrats your Quiz is <br/>Published!</h3>
-                <div className= {styles["link"]}>{`${quiz_url}/play/${quizId}` || "Your Link here"}</div>
+                <div className= {styles["link"]}>{`https://quiz027.netlify.app/quizzes/play/${quizId}` || "Your Link here"}</div>
                 <button onClick={() => shareLink(quizId)}>Share</button>
             </div>} 
             
