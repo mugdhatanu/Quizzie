@@ -107,13 +107,8 @@ export const getDetails = async() => {
 }
 
 export const selectAnswers = async(quizId,data) => {
-    const options = {
-        headers: {
-            Authorization: "Bearer " + getValueFromLocal()
-        }
-    }
     try{
-        const res = await axios.patch(`${quiz_url}/${quizId}`,{questionAnalysis: data},options);
+        const res = await axios.patch(`${quiz_url}/${quizId}`,{questionAnalysis: data});
         console.log(res.data);
     } catch(err) {
         console.log(err);

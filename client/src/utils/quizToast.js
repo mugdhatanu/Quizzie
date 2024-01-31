@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+const quiz_url = import.meta.env.VITE_QUIZ_BACKEND_URL || 'http://localhost:3000/quizzes'
 
 const toastSuccess = () => {
     toast.success("Copied quiz link to clipboard", {
@@ -14,6 +15,6 @@ const toastSuccess = () => {
 }
 
 export const shareLink = (id) => {
-    navigator.clipboard.writeText(`http://localhost:5173/quizzes/${id}`);
+    navigator.clipboard.writeText(`${quiz_url}/play/${id}`);
     toastSuccess();
 }

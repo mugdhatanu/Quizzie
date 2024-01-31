@@ -1,5 +1,5 @@
 import axios from 'axios'
-const users_url = import.meta.env.USER || 'http://localhost:3000/users';
+const users_url = import.meta.env.VITE_USER_BACKEND_URL || 'http://localhost:3000/users';
 import toast from 'react-hot-toast'
 
 
