@@ -66,7 +66,8 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
 
   const increaseCount = (question,option) => {
     const questionObj = pollAnalysis.find(poll => poll.questionId === question._id);
-    const options = questionObj?.options;
+    console.log(pollAnalysis);
+    const options = questionObj.options;
     const updateOption = options.find(optionObj => optionObj._id === option._id);
     const prevTimesSelected = options.reduce(optionObj => optionObj._id === option._id ? optionObj.timesSelected : 0);
     if(updateOption.timesSelected - prevTimesSelected < 1) {
@@ -123,8 +124,12 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
         setQuestionAnalysis(updatedData);
         setPrevScore(score);
       } else {
+        const requriedQuestion = pollAnalysis.find(questionObj => questionObj.questionId === question._id);
         const updatedOptions = options.map(option => option._id === selectedPollOption._id ? selectedPollOption : option);
-        setPollAnalysis(updatedOptions);
+        const updatedQuestion = {questionId: requriedQuestion._id,options: updatedOptions};
+        const updatedAnalysis = pollAnalysis.filter(pollObj => pollObj.questionId === updatedQuestion.questionId ? updatedQuestion: pollObj);
+        setPollAnalysis(updatedAnalysis);
+        setCurrentQuestion(prev => prev+1);
       }
     }
   }
