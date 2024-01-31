@@ -11,8 +11,5 @@ export const registerCheck = (user) => {
     if(!name || !email || !password || !confirmPass) {
         return false;
     }
-    if(password !== confirmPass) {
-        return false;
-    }
     return true;
 }

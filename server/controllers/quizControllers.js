@@ -103,7 +103,8 @@ const editQuiz = async(req,res,next) => {
                 updatedQuestion.options.forEach(option => {
                     option.timesSelected = 0;
                 });
-                updatedQuestion.totalAttempts = 0;
+                    question.answer = updatedQuestion.answer;
+                    updatedQuestion.totalAttempts = 0;
                     updatedQuestion.correctAttempts = 0;
                     updatedQuestion.incorrectAttempts = 0;
                 return updatedQuestion;

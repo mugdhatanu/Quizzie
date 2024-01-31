@@ -8,6 +8,7 @@ import Auth from './pages/auth/Auth';
 import PlayQuiz from './pages/quiz/PlayQuiz';
 import Error from './pages/error/Error';
 import ProtectedRoutes from './middleware/ProtectedRoutes';
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -17,6 +18,7 @@ function App() {
     <div className = {styles["app"]}>
         <Router>
           <Sidebar/>
+          <Toaster />
           <Routes>
             <Route path = "*" element = {<Error />} />
             <Route path = "/" element = {<Auth />} />

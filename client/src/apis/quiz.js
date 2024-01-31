@@ -36,13 +36,12 @@ export const addNewQuiz = async(quiz) => {
     }
 }
 
-export const updateQuiz = async(quiz_id,quiz) => {
+export const updateQuiz = async(quiz_id,questions) => {
     const options = {
         headers: {
             Authorization: "Bearer " + getValueFromLocal()
         }
     }
-    const {questions} = quiz;
     try {
         const res = await axios.patch(`${quiz_url}/edit`,{quiz_id,updatedData:questions},options);
         console.log(res.data);

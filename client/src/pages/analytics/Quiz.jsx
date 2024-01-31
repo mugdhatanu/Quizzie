@@ -4,12 +4,14 @@ import EditIcon from './../../assets/edit.png'
 import DeleteIcon from './../../assets/delete.png'
 import ShareIcon from './../../assets/share.png'
 import { Link } from "react-router-dom"
-import { Fragment, useState } from "react"
+import { useState } from "react"
 import { deleteQuiz } from "../../apis/quiz"
 import { useQuizContext } from "../../context/QuizContext"
 import Modal from "../../components/modal/Modal"
 import { useModalContext } from "../../context/ModalContext"
 import { formatImpressionCount } from './../../utils/impression';
+import { Toaster } from "react-hot-toast"
+import { shareLink } from "../../utils/quizToast"
 
 
 
@@ -32,25 +34,26 @@ const Quiz = ({quiz,id,index,currentQuiz,setCurrentQuiz}) => {
 
 
     const edit = (e) => {
-        const _id = getId(e);;
+        const _id = getId(e);
         const quiz = quizzes.find(quiz=> quiz._id === _id);
-        
         setCurrentQuiz(quiz);
         setShowModal({initQuiz: false,initQuestions: true, edit: true})
+    
     }
-   
+    
     return (
         <>
+            <Toaster />
             <tr>
                 {deleteBox && 
                 <td>
                     <div className = {styles["overlay"]}></div>
                 </td>}
-                {!showModal.edit && (showModal.initQuestions || showModal.initQuiz) && 
+                {/* {!showModal.edit && (showModal.initQuestions || showModal.initQuiz) && 
                 <td>
                     <Modal />  
                 </td>
-                }
+                } */}
                 {showModal.edit && currentQuiz && (showModal.initQuestions || showModal.initQuiz) && 
                 <td>
                     <Modal quiz = {currentQuiz}/>  
@@ -79,7 +82,7 @@ const Quiz = ({quiz,id,index,currentQuiz,setCurrentQuiz}) => {
                     <button onClick={() => setDeleteBox(true)}>
                         <img src = {DeleteIcon} alt = "Delete Icon" />
                     </button>
-                    <button onClick={() => navigator.clipboard.writeText(`http://localhost:5173/quizzes/${quiz._id}`)}>
+                    <button onClick={() => shareLink(quiz._id)}>
                         <img src = {ShareIcon} alt = "Share Icon" />
                     </button>
                 </td>

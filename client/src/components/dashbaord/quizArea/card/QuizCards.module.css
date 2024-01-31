@@ -12,6 +12,8 @@
     display: flex;
     gap: 1rem;
     overflow-y: scroll;
+    flex-wrap: wrap;
+    height: 30vh;
 }
 
 .cards-section::-webkit-scrollbar {
@@ -19,7 +21,7 @@
 }
 
 .cards-section::-webkit-scrollbar-thumb {
-    background-color: var(--slate-800);
+    background-color: var(--gray-400);
     border-radius: 10px;
 }
 
@@ -27,6 +29,7 @@
     background-color: white;
     padding: 1rem;
     border-radius: 10px;
+    height: clamp(50px,10vh,80px);
 }
 
 .quiz-card p {

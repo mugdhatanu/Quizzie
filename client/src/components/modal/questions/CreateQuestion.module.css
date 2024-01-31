@@ -194,4 +194,5 @@
 .options .option .select {
     background-color: var(--green-600);
     color: white;
+    transform: translateX(-4px);
 }

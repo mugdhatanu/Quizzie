@@ -18,6 +18,7 @@ const Modal = ({quiz}) => {
             questions: showModal.edit? quiz?.questions: []
         })
     },[showModal.edit]);
+  
 
     const show = showModal.initQuiz || showModal.initQuestions;
     return (

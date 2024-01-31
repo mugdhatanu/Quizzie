@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 
 export const toastSuccess = (msg) => {
     toast.success(`User successfully ${msg}`, {
-        duration: 4000,
+        duration: 2000,
         position: 'top-right',
         iconTheme: {
             primary: 'rgb(16, 211, 16)',
@@ -18,7 +18,7 @@ export const toastSuccess = (msg) => {
 
 export const toastError = (msg) => {
     toast.error(`${msg}`, {
-        duration: 4000,
+        duration: 2000,
         position: 'top-right',
         iconTheme: {
             primary: 'rgb(248, 63, 63)',
@@ -39,9 +39,10 @@ export const login = async (user) => {
 }
 
 export const signUp = async (user) => {
-    const userObj = {userName: user.name,email: user.email,passwrod: user.password};
+    const userObj = {name: user.name,email: user.email,password: user.password};
     try {
         const res = await axios.post(`${users_url}/register`,userObj);
+        console.log(res.data);
         return res.data;
     } catch(err) {
         throw err;

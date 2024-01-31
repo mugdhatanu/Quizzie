@@ -1,4 +1,3 @@
-import { useQuizContext } from "../../context/QuizContext"
 import Quiz from "./Quiz"
 import styles from './Analytics.module.css'
 import { useModalContext } from "../../context/ModalContext";

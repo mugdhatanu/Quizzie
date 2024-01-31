@@ -8,11 +8,10 @@ import { loginCheck } from '../../utils/validation/userForm';
 
 const Login = () => {
   const [userDetails,setUserDetails] = useState({email :'', password: ''});
-  const [toSend,setToSend] = useState(false);
+  const [error,setError] = useState(false);
   const navigate = useNavigate();
   const loginUser = async(e) => {
     e.preventDefault();
-    setToSend(true);
     if(loginCheck(userDetails)) {
       try {
         const res = await login(userDetails);
@@ -24,32 +23,38 @@ const Login = () => {
       } catch(err) {
         toastError(err.response.data.msg);
       } 
+    } else {
+      setError(true);
     }
-    }
+  }
     
 
   return (
     <form className= {styles["login"]} onSubmit = {loginUser}>
       <div>
         <label htmlFor="email">Email</label>
-        <input 
-        type="text" 
-        value = {userDetails.email} 
-        placeholder= {toSend && !userDetails.email ? "Invalid email": ""}
-        onChange = {(e) => setUserDetails(prev => ({...prev,email: e.target.value}))} 
-        name = "email" 
-        id = "email"
-        />
+        <div className= {styles['input-field']}>
+          <input 
+          type="text" 
+          value = {userDetails.email} 
+          onChange = {(e) => setUserDetails(prev => ({...prev,email: e.target.value}))} 
+          name = "email" 
+          id = "email"
+          />
+          {error && !userDetails.email && <p className = {styles['error-text']}>Invalid email</p>}
+        </div>
       </div>
       <div className= {styles["password"]}>
         <label htmlFor="password">Password</label>
-        <input 
-        type="text" 
-        value = {userDetails.password} 
-        placeholder= {toSend && !userDetails.password ? "Invalid password": ""}
-        onChange = {(e) => setUserDetails(prev => ({...prev,password: e.target.value}))} 
-        name = "password" 
-        id = "password" />
+        <div className= {styles['input-field']}>
+          <input 
+          type="password" 
+          value = {userDetails.password} 
+          onChange = {(e) => setUserDetails(prev => ({...prev,password: e.target.value}))} 
+          name = "password" 
+          id = "password" />
+          {error && !userDetails.password && <p className = {styles['error-text']}>Invalid password</p>}
+        </div>
       </div>
       <button className= {styles["login-btn"]}>Log in</button>
     </form>

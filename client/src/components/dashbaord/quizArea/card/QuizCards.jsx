@@ -4,7 +4,8 @@ import { useQuizzes } from "../../../../hooks/useQuizzes";
 
 const QuizCards = () => {
     const [quizzes,loading,error] = useQuizzes();
-    const displayQuizCards = quizzes?.map((quiz,index) => (
+    const filterQuizzes = quizzes?.filter(quiz => quiz.impressions > 10);
+    const displayQuizCards = filterQuizzes?.map((quiz,index) => (
         <QuizCard key = {index} quiz = {quiz} />
     ))
     return (

@@ -7,11 +7,13 @@ import { useQuizDetails } from '../../hooks/useQuizDetails';
 
 
 const PlayQuiz = () => {
+  
   const [quiz,setQuiz] = useState(null);
   const {quiz_id} = useParams();
   const quizDetails = useQuizDetails(quiz_id);
   const [questionAnalysis,setQuestionAnalysis] = useState([]);
   const [pollAnalysis,setPollAnalysis] = useState([]);
+  
   
   useEffect(() => {
     const fetchDetails = async () => {
@@ -34,8 +36,7 @@ const PlayQuiz = () => {
     const pollData = getPollData();
     setPollAnalysis(pollData);
   },[quizDetails]);
-
-
+  
   return (
     <div className= {styles["play"]}>
       <AnswerQuestions 

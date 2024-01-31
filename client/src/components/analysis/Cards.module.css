@@ -23,19 +23,12 @@
     font-size: clamp(1.5rem,2vw,2.5rem);
 }
 
+.poll-cards {
+    justify-content: flex-start;
+}
 .poll-cards div {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
 
-@media screen and (max-width: 1000px) {
-    .question-cards {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-    }
-    .question-cards div {
-        width: 50%;
-    }
-}

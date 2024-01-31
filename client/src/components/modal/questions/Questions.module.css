@@ -118,3 +118,15 @@
 .close img {
     cursor: pointer;
 }
+
+.error-text {
+    position: absolute;
+    top: 0;
+    left: 3rem;
+    font-weight: 500;
+    color: var(--red-500)
+}
+
+.hide {
+    display: none;
+}

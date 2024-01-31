@@ -53,13 +53,16 @@
 }
 
 .options button {
-    padding: 1rem 0;
+    padding: 1rem;
     border-radius: 10px;
     font-family: 'Poppins',sans-serif;
     font-weight: 600;
     border: 2px solid transparent;
     cursor: pointer;
     font-size: calc(1.2rem,1vw,1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .options button:hover, .select {
@@ -112,6 +115,24 @@
 }
 
 
+.option-btn img {
+    width: 30%;
+    border-radius: 10px;
+}
+
+.options .img-btn {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 200px;
+}
+
+.img-btn img {
+    flex-grow:1;
+}
+
+
+
 @media screen and (min-width: 800px) {
     
     .question-num  {
@@ -138,4 +159,9 @@
     .score {
         flex-direction: row;
     }
+
+    .options .img-btn {
+        width: 25%;
+    }
+    
 }

@@ -81,3 +81,11 @@
     background-color: var(--green-600);
     color: white;
 }
+
+.error-text {
+    position: absolute;
+    top: 0;
+    left: 3rem;
+    font-weight: 500;
+    color: var(--red-500)
+}

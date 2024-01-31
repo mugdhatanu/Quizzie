@@ -7,6 +7,11 @@
 }
 
 
+.register div, .login div {
+    display: flex;
+    align-items: center;
+}
+
 .register div input, .login div input {
     border-width: 0 0 2px 0;
     border-radius: 10px 10px 0 0;
@@ -18,19 +23,25 @@
     width: 20vw;
 }
 
+.register div input::placeholder, .login div input::placeholder {
+    font-size: 'Poppins',sans-serif;
+    font-weight: 600;
+    color: var(--red-500);
+}
+
+
+.input-field {
+    display: flex;
+}
 
 .register .password, .login .password {
     width: 40vw;
     margin-left: -2rem;
 }
 
-.register .password input  {
-    width: 50%;
-}
 
-.password label {
-    transform: translateX(-2rem);
-}
+
+
 
 .confirm-pass {
     margin-left: -6.3rem;
@@ -49,12 +60,11 @@
     font-size: clamp(1rem,1vw,1.5rem);
     padding: 0.2rem 5rem;
     cursor: pointer;
+    margin-bottom: 1rem;
 }
 
-.error {
+.error-text {
     color: var(--red-500);
-    font-size: 12px;
-    margin-left: 5rem;
-    margin-top: 0;
-    margin-bottom: 0;
+    font-size: 90%;
+    margin-left: 2px;
 }

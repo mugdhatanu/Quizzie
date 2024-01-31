@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import styles from './AnswerPage.module.css';
 import Result from './Result';
 import { selectAnswers } from '../../apis/quiz';
@@ -150,16 +150,24 @@ const AnswerQuestions = ({quiz,questions,questionAnalysis,setQuestionAnalysis,po
     moveToNext();
   },[quiz,timer]);
 
-console.log(questionAnalysis);
 
   const displayOptions = (question,options) => {
-    if(quiz?.optionsType !== "Text-Image") {
+    if(quiz?.optionsType === "Text") {
       return options.map((option,index) => (
         <button key = {index} onClick = {() => quiz?.quizType === "Poll" ? increaseCount(question,option) : checkAnswer(question,option)} style = {getOptionStyle(option,selectedOption,false)}>{option.value.text}</button>
       ))
+    } else if(quiz?.optionsType === "Text-Image"){
+      return options.map((option,index) => (
+        <button key = {index} onClick = {() => quiz?.quizType === "Poll" ? increaseCount(question,option) : checkAnswer(question,option)} className = {styles['option-btn']} style = {getOptionStyle(option,selectedOption,true)}>
+          <span>{option.value.text}</span>
+          <img src = {option.value.url} alt = "Option image" />
+        </button>
+      ))
     } else {
       return options.map((option,index) => (
-        <button key = {index} onClick = {() => quiz?.quizType === "Poll" ? increaseCount(question,option) : checkAnswer(question,option)} style = {getOptionStyle(option,selectedOption,true)}>{option.value.text}{option.value.url}</button>
+        <button key = {index} onClick = {() => quiz?.quizType === "Poll" ? increaseCount(question,option) : checkAnswer(question,option)} className = {`${styles['option-btn']} ${styles['img-btn']}`} style = {getOptionStyle(option,selectedOption,false)}>
+          <img src = {option.value.text || option.value.url} alt = "Option Image" />
+        </button>
       ))
     }
   }

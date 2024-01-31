@@ -35,7 +35,7 @@ const Sidebar = () => {
       </div>
       {show && <Modal />}
     </>
-    
+  
   )
 }
 
